@@ -1,0 +1,67 @@
+﻿<Window x:Class="Evie.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodel="clr-namespace:Evie.MVVM.ViewModel"
+        xmlns:model="clr-namespace:Evie.MVVM.Model"
+        mc:Ignorable="d"
+        Title="Easy Virtual Integrated Environment"
+        Height="450"
+        Width="800"
+        Background="#1E1E1E">
+
+    <Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <TreeView ItemsSource="{Binding TreeViewItems}"
+                  Name="TreeView">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type model:TreeViewItemModel}"
+                                          ItemsSource="{Binding SubItems}">
+                    <TextBlock Text="{Binding Path=Title}" />
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type model:TabItemModel}">
+
+                    <TextBlock Text="{Binding Path=Title}">
+                        <TextBlock.InputBindings>
+                            <MouseBinding Gesture="LeftDoubleClick"
+                                          Command="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                          AncestorType={x:Type TreeView}}, 
+                                          Path=DataContext.AddToTabsCommand}"
+                                          CommandParameter="{Binding .}" />
+                        </TextBlock.InputBindings>
+                    </TextBlock>
+                </DataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+
+        <GridSplitter Width="5" />
+
+        <TabControl Grid.Column="1"
+                    ItemsSource="{Binding TabsCollection}">
+
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type TabItem}">
+                    <TextBlock Text="{Binding Title}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid Background="{Binding Color}">
+                        <TextBlock Text="{Binding Description}"/>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </Grid>
+
+</Window>
