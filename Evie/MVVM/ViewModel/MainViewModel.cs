@@ -2,14 +2,18 @@
 using Evie.MVVM.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.Net.Sockets;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Evie.MVVM.ViewModel
 {
     internal class MainViewModel
     {
+        public GlobalViewModel Global { get; } = GlobalViewModel.Instance;
         public ObservableCollection<TreeViewItemModel> TreeViewItems { get; set; }
         public ObservableCollection<TabItemModel> TabsCollection { get; set; }
+
 
         public RelayCommand AddToTabsCommand { get; set; }
 
@@ -28,7 +32,9 @@ namespace Evie.MVVM.ViewModel
                     items.Add(new TabItemModel
                     {
                         Title = $"Item {r}",
-                        Description = $"Test {b.Next(5000, 10000)}"
+                        Description = $"Test {b.Next(5000, 10000)}",
+                        IP = "127.0.0.1",
+                        Port = 1313
                     });
 
                 TreeViewItems.Add(new TreeViewItemModel
@@ -45,7 +51,12 @@ namespace Evie.MVVM.ViewModel
         {
             var item = o as TabItemModel;
             if (!TabsCollection.Contains(item))
-                TabsCollection.Add(item);
+            {
+                if (item.Connect())
+                {
+                    TabsCollection.Add(item);
+                }
+            }
         }
     }
 }

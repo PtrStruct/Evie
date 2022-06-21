@@ -16,12 +16,29 @@
     </Window.DataContext>
 
     <Grid>
+
+        <Grid.Resources>
+            <ContextMenu x:Key="TreeViewContext">
+                <MenuItem Header="Add new"
+                          Icon="➕" />
+            </ContextMenu>
+        </Grid.Resources>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition MinWidth="100"
+                              MaxWidth="200"
+                              Width="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+
         <TreeView ItemsSource="{Binding TreeViewItems}"
+                  ContextMenu="{StaticResource TreeViewContext}"
+                  Grid.RowSpan="1"
                   Name="TreeView">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type model:TreeViewItemModel}"
@@ -57,11 +74,33 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <Grid Background="{Binding Color}">
-                        <TextBlock Text="{Binding Description}"/>
+                        <TextBlock Text="{Binding Description}" />
                     </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
+
+
+        <StackPanel Background="#1E1E1E"
+                    Grid.Row="1">
+            <TextBlock Text="IP"
+                       Foreground="White" />
+            <TextBox IsEnabled="False"
+                     Text="{Binding ElementName=TreeView, Path=SelectedItem.IP}" />
+
+            <TextBlock Text="Port"
+                       Foreground="White" />
+            <TextBox IsEnabled="False"
+                     Text="{Binding ElementName=TreeView, Path=SelectedItem.Port}" />
+
+        </StackPanel>
+
+        <ListView Grid.Row="1"
+                  Grid.Column="1"
+                  ScrollViewer.CanContentScroll="False"
+                  ItemsSource="{Binding Global.Logs}">
+        </ListView>
+
     </Grid>
 
 </Window>
