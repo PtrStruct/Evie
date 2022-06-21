@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodel="clr-namespace:Evie.MVVM.ViewModel"
+        xmlns:converters="clr-namespace:Evie.Converters"
         xmlns:model="clr-namespace:Evie.MVVM.Model"
         mc:Ignorable="d"
         Title="Easy Virtual Integrated Environment"
@@ -14,6 +15,10 @@
     <Window.DataContext>
         <viewmodel:MainViewModel />
     </Window.DataContext>
+
+    <Window.Resources>
+        <converters:ByteArrayToBitmapSourceConverter x:Key="YesNoToBooleanConverter" />
+    </Window.Resources>
 
     <Grid>
 
@@ -74,7 +79,7 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <Grid Background="{Binding Color}">
-                        <TextBlock Text="{Binding Description}" />
+                        <Image Source="{Binding ImageData, Converter={StaticResource YesNoToBooleanConverter}}" Stretch="Uniform" />
                     </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
@@ -83,6 +88,11 @@
 
         <StackPanel Background="#1E1E1E"
                     Grid.Row="1">
+            <TextBlock Text="Name"
+                       Foreground="White" />
+            <TextBox IsEnabled="False"
+                     Text="{Binding ElementName=TreeView, Path=SelectedItem.Title}" />
+            
             <TextBlock Text="IP"
                        Foreground="White" />
             <TextBox IsEnabled="False"

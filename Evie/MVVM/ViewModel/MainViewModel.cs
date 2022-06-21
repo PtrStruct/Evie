@@ -1,10 +1,8 @@
-﻿using Evie.MVVM.Core;
+﻿using Evie.Interfaces;
+using Evie.MVVM.Core;
 using Evie.MVVM.Model;
 using System;
 using System.Collections.ObjectModel;
-using System.Net.Sockets;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace Evie.MVVM.ViewModel
 {
@@ -49,12 +47,12 @@ namespace Evie.MVVM.ViewModel
 
         private void AddToTabCollection(object o)
         {
-            var item = o as TabItemModel;
-            if (!TabsCollection.Contains(item))
+            var socket = o as TabItemModel;
+            if (!TabsCollection.Contains(socket))
             {
-                if (item.Connect())
+                if (socket.Connect())
                 {
-                    TabsCollection.Add(item);
+                    TabsCollection.Add(socket);
                 }
             }
         }

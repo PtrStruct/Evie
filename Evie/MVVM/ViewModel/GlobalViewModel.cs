@@ -12,5 +12,11 @@ namespace Evie.MVVM.ViewModel
     {
         public static GlobalViewModel Instance { get; private set; } = new GlobalViewModel();
         public ObservableCollection<string> Logs { get; private set; } = new ObservableCollection<string>();
+
+        public static void AddLog(string msg)
+        {
+            Instance.Logs.Add(msg);
+        }
+
     }
 }
